@@ -31,6 +31,7 @@ model Driver {
   description String
   car         String
   rating      Float
+  ratingText  String
   pricePerKm  Float
   minimumKm   Float
   createdAt   DateTime @default(now())
