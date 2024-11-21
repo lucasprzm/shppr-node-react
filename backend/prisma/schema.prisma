@@ -9,6 +9,48 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id        Int   @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  removedAt DateTime?
+  rides     Ride[]
+}
+
+// ride/estimate não precisa de tabela no banco de dados
+model Driver {
+  id          Int   @id @default(autoincrement())
+  name        String 
+  description String
+  car         String
+  rating      Float
+  pricePerKm  Float
+  minimumKm   Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  removedAt   DateTime?
+  rides       Ride[]
+}
+
+model Ride {
+  id          Int   @id @default(autoincrement())
+  driver_id    Int
+  driver      Driver @relation(fields: [driver_id], references: [id])
+  customer_id  Int
+  customer    Customer  @relation(fields: [customer_id], references: [id])
+  origin      String
+  destination String
+  distance    Float
+  duration    String
+  value       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  removedAt   DateTime?
 }
