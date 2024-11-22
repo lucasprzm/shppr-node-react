@@ -15,7 +15,7 @@ datasource db {
 
 // TODO: se tiver tempo de adicionar password e hash para encriptar a senha
 model Customer {
-  id        Int   @id @default(autoincrement())
+  id        String   @id @default(uuid())
   email     String   @unique
   name      String?
   createdAt DateTime @default(now())
@@ -42,9 +42,9 @@ model Driver {
 
 model Ride {
   id          Int   @id @default(autoincrement())
-  driver_id    Int
+  driver_id   Int
   driver      Driver @relation(fields: [driver_id], references: [id])
-  customer_id  Int
+  customer_id String
   customer    Customer  @relation(fields: [customer_id], references: [id])
   origin      String
   destination String
