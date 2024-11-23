@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // TODO - Melhorar a documentação da API
   const config = new DocumentBuilder()
     .setTitle('Taxi App API')
     .setDescription('The Taxi App API description')
