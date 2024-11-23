@@ -1,7 +1,8 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Patch, Post } from '@nestjs/common';
 import { EstimateRideReqDto } from 'src/rides/dtos/estimate-ride-req.dto';
 import { EstimateRideDto } from 'src/rides/dtos/estimate-ride.dto';
 import { RideService } from 'src/rides/ride.service';
+import { ConfirmRideReqDto } from './dtos/confirm-ride-req.dto';
 
 @Controller('ride')
 export class RideController {
@@ -17,5 +18,11 @@ export class RideController {
       request.destination,
       request.customer_id,
     );
+  }
+
+  @Patch('confirm')
+  @HttpCode(200)
+  async confirm(@Body() request: ConfirmRideReqDto): Promise<void> {
+    // TODO
   }
 }
