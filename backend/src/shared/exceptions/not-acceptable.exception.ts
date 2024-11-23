@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export class BadRequestException extends HttpException {
+export class NotAcceptableException extends HttpException {
   constructor(error_code: string, error_description: string) {
     super(
       {
         error_code,
         error_description,
       },
-      HttpStatus.BAD_REQUEST,
+      HttpStatus.NOT_ACCEPTABLE,
     );
   }
 }

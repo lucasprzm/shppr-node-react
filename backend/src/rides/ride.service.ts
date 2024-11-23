@@ -1,14 +1,14 @@
-import {
-  Injectable,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   ConfirmRideReqDto,
   EstimateRideDto,
   RideByCustomerDto,
 } from 'src/rides/dtos';
-import { BadRequestException } from 'src/shared/exceptions/badrequest.exception';
+import {
+  BadRequestException,
+  NotAcceptableException,
+  NotFoundException,
+} from 'src/shared/exceptions';
 import { GoogleMapsService } from 'src/shared/services/google-maps.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
@@ -24,20 +24,17 @@ export class RideService {
     destination: string,
     customer_id: string,
   ): Promise<EstimateRideDto> {
-    // TODO - procurar lib para validações de dados
+    // TODO - procurar lib para validações de dados Zod ou class-validator, tem nas docs do NestJS
     if (
       origin == null ||
-      destination == null ||
-      customer_id == null ||
       origin === '' ||
+      destination == null ||
       destination === '' ||
+      customer_id == null ||
       customer_id === '' ||
       origin === destination
     ) {
-      throw new BadRequestException(
-        'INVALID_DATA',
-        'Os dados fornecidos no corpo da requisição são inválidos',
-      );
+      throw new BadRequestException();
     }
 
     let estimateRideDto = new EstimateRideDto();
@@ -60,19 +57,21 @@ export class RideService {
       },
     });
 
-    estimateRideDto.options = driversOptions.map((driver) => {
-      return {
-        id: driver.id,
-        name: driver.name,
-        description: driver.description,
-        vehicle: driver.car,
-        review: {
-          rating: driver.rating,
-          comment: driver.ratingText,
-        },
-        value: driver.pricePerKm * estimateRideDto.distance,
-      };
-    });
+    estimateRideDto.options = driversOptions
+      .map((driver) => {
+        return {
+          id: driver.id,
+          name: driver.name,
+          description: driver.description,
+          vehicle: driver.car,
+          review: {
+            rating: driver.rating,
+            comment: driver.ratingText,
+          },
+          value: driver.pricePerKm * estimateRideDto.distance,
+        };
+      })
+      .sort((a, b) => a.value - b.value);
 
     estimateRideDto.origin =
       estimateRideDto.routeResponse.routes[0].legs[0].startLocation.latLng;
@@ -92,10 +91,7 @@ export class RideService {
       request.customer_id == null ||
       request.origin == request.destination
     ) {
-      throw new BadRequestException(
-        'INVALID_DATA',
-        'Os dados fornecidos no corpo da requisição são inválidos',
-      );
+      throw new BadRequestException();
     }
 
     const driver = await this.prismaService.driver.findUnique({
@@ -105,11 +101,15 @@ export class RideService {
     });
 
     if (driver == null) {
-      throw new NotFoundException('Motorista não encontrado');
+      throw new NotFoundException(
+        'DRIVER_NOT_FOUND',
+        'Motorista não encontrado',
+      );
     }
 
     if (driver.minimumKm > request.distance) {
       throw new NotAcceptableException(
+        'INVALID_DISTANCE',
         'Quilometragem inválida para o motorista',
       );
     }
@@ -132,10 +132,7 @@ export class RideService {
     driver_id?: string,
   ): Promise<RideByCustomerDto> {
     if (customer_id == null || customer_id == '') {
-      throw new BadRequestException(
-        'INVALID_DATA',
-        'Os dados fornecidos no corpo da requisição são inválidos',
-      );
+      throw new BadRequestException();
     }
     const driver_id_int = driver_id != null ? parseInt(driver_id) : null;
 
@@ -165,7 +162,10 @@ export class RideService {
     });
 
     if (rides.length === 0) {
-      throw new NotFoundException('Nenhum registro encontrado');
+      throw new NotFoundException(
+        'NO_RIDES_FOUND',
+        'Nenhum registro encontrado',
+      );
     }
 
     const rideByCustomerDto = new RideByCustomerDto();
