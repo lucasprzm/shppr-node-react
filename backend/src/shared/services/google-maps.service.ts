@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { env } from 'process';
 import { catchError, firstValueFrom } from 'rxjs';
-import { ComputeRoutesGoogleMapsDto } from '../dtos/compute-routes.google-maps.dto';
+import { ComputeRoutesGoogleMapsDto } from '../dtos';
 
 @Injectable()
 export class GoogleMapsService {
@@ -12,7 +12,6 @@ export class GoogleMapsService {
     origin: string,
     destination: string,
   ): Promise<ComputeRoutesGoogleMapsDto> {
-    console.log(env.GOOGLE_API_KEY);
     const req = {
       origin: {
         address: '1800 Amphitheatre Parkway, Mountain View, CA 94043',
