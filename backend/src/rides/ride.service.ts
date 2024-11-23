@@ -1,7 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { EstimateRideDto } from 'src/rides/dtos/estimate-ride.dto';
 import { GoogleMapsService } from 'src/shared/services/google-maps.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
+import { ConfirmRideReqDto } from './dtos/confirm-ride-req.dto';
 
 @Injectable()
 export class RideService {
@@ -38,7 +44,7 @@ export class RideService {
 
     const route = estimateRideDto.routeResponse.routes[0];
 
-    estimateRideDto.duration = parseFloat(route.duration);
+    estimateRideDto.duration = route.duration;
 
     estimateRideDto.distance = route.distanceMeters / 1000;
 
@@ -70,5 +76,37 @@ export class RideService {
       estimateRideDto.routeResponse.routes[0].legs[0].endLocation.latLng;
 
     return estimateRideDto;
+  }
+
+  async confirmRide(request: ConfirmRideReqDto): Promise<void> {
+    if (
+      request.origin == null ||
+      request.destination == null ||
+      request.origin == '' ||
+      request.destination == '' ||
+      request.customer_id == '' ||
+      request.customer_id == null ||
+      request.origin == request.destination
+    ) {
+      throw new BadRequestException(
+        'Os dados fornecidos no corpo da requisição são inválidos',
+      );
+    }
+
+    const driver = await this.prismaService.driver.findUnique({
+      where: {
+        id: request.driver.id,
+      },
+    });
+
+    if (driver == null) {
+      throw new NotFoundException('Motorista não encontrado');
+    }
+
+    if (driver.minimumKm > request.distance) {
+      throw new NotAcceptableException(
+        'Quilometragem inválida para o motorista',
+      );
+    }
   }
 }

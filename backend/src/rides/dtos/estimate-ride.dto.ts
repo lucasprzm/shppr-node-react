@@ -8,7 +8,7 @@ export class EstimateRideDto {
   origin: LatLng;
   destination: LatLng;
   distance: number;
-  duration: number;
+  duration: string;
   options: RideDto[];
   routeResponse: ComputeRoutesGoogleMapsDto;
 }
