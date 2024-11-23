@@ -1,8 +1,21 @@
-import { Body, Controller, HttpCode, Patch, Post } from '@nestjs/common';
-import { EstimateRideReqDto } from 'src/rides/dtos/estimate-ride-req.dto';
-import { EstimateRideDto } from 'src/rides/dtos/estimate-ride.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
+import {
+  ConfirmRideReqDto,
+  EstimateRideDto,
+  EstimateRideReqDto,
+  RideByCustomerDto,
+} from 'src/rides/dtos';
 import { RideService } from 'src/rides/ride.service';
-import { ConfirmRideReqDto } from './dtos/confirm-ride-req.dto';
 
 @Controller('ride')
 export class RideController {
@@ -13,7 +26,7 @@ export class RideController {
   async estimate(
     @Body() request: EstimateRideReqDto,
   ): Promise<EstimateRideDto> {
-    return this.rideService.estimateRide(
+    return this.rideService.estimate(
       request.origin,
       request.destination,
       request.customer_id,
@@ -23,6 +36,16 @@ export class RideController {
   @Patch('confirm')
   @HttpCode(200)
   async confirm(@Body() request: ConfirmRideReqDto): Promise<void> {
-    // TODO
+    return this.rideService.confirm(request);
+  }
+
+  @Get(':customer_id')
+  @HttpCode(200)
+  @ApiQuery({ name: 'driver_id', required: false })
+  async findByCustomer(
+    @Param('customer_id') customer_id: string,
+    @Query('driver_id') driver_id?: string,
+  ): Promise<RideByCustomerDto> {
+    return this.rideService.findByCustomer(customer_id, driver_id);
   }
 }

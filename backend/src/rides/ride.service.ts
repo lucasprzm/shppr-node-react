@@ -1,13 +1,16 @@
 import {
-  BadRequestException,
   Injectable,
   NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
-import { EstimateRideDto } from 'src/rides/dtos/estimate-ride.dto';
+import {
+  ConfirmRideReqDto,
+  EstimateRideDto,
+  RideByCustomerDto,
+} from 'src/rides/dtos';
+import { BadRequestException } from 'src/shared/exceptions/badrequest.exception';
 import { GoogleMapsService } from 'src/shared/services/google-maps.service';
 import { PrismaService } from 'src/shared/services/prisma.service';
-import { ConfirmRideReqDto } from './dtos/confirm-ride-req.dto';
 
 @Injectable()
 export class RideService {
@@ -16,7 +19,7 @@ export class RideService {
     private prismaService: PrismaService,
   ) {}
 
-  async estimateRide(
+  async estimate(
     origin: string,
     destination: string,
     customer_id: string,
@@ -32,6 +35,7 @@ export class RideService {
       origin === destination
     ) {
       throw new BadRequestException(
+        'INVALID_DATA',
         'Os dados fornecidos no corpo da requisição são inválidos',
       );
     }
@@ -78,7 +82,7 @@ export class RideService {
     return estimateRideDto;
   }
 
-  async confirmRide(request: ConfirmRideReqDto): Promise<void> {
+  async confirm(request: ConfirmRideReqDto): Promise<void> {
     if (
       request.origin == null ||
       request.destination == null ||
@@ -89,6 +93,7 @@ export class RideService {
       request.origin == request.destination
     ) {
       throw new BadRequestException(
+        'INVALID_DATA',
         'Os dados fornecidos no corpo da requisição são inválidos',
       );
     }
@@ -108,5 +113,70 @@ export class RideService {
         'Quilometragem inválida para o motorista',
       );
     }
+
+    await this.prismaService.ride.create({
+      data: {
+        origin: request.origin,
+        destination: request.destination,
+        driver_id: driver.id,
+        customer_id: request.customer_id,
+        distance: request.distance,
+        value: request.value,
+        duration: request.duration,
+      },
+    });
+  }
+
+  async findByCustomer(
+    customer_id: string,
+    driver_id?: string,
+  ): Promise<RideByCustomerDto> {
+    if (customer_id == null || customer_id == '') {
+      throw new BadRequestException(
+        'INVALID_DATA',
+        'Os dados fornecidos no corpo da requisição são inválidos',
+      );
+    }
+    const driver_id_int = driver_id != null ? parseInt(driver_id) : null;
+
+    if (driver_id_int != null && driver_id_int <= 0) {
+      throw new BadRequestException('INVALID_DRIVER', 'Motorista inválido');
+    }
+
+    if (driver_id_int != null) {
+      const driverExists = await this.prismaService.driver.findUnique({
+        where: {
+          id: driver_id_int,
+        },
+      });
+      if (!driverExists) {
+        throw new BadRequestException('INVALID_DRIVER', 'Motorista inválido');
+      }
+    }
+
+    const rides = await this.prismaService.ride.findMany({
+      where: {
+        customer_id,
+        driver_id: driver_id_int != null ? driver_id_int : undefined,
+      },
+      include: {
+        driver: true,
+      },
+    });
+
+    if (rides.length === 0) {
+      throw new NotFoundException('Nenhum registro encontrado');
+    }
+
+    const rideByCustomerDto = new RideByCustomerDto();
+    rideByCustomerDto.customer_id = customer_id;
+    rideByCustomerDto.rides = rides.map((ride) => {
+      return {
+        ...ride,
+        date: ride.createdAt,
+      };
+    });
+
+    return rideByCustomerDto;
   }
 }
