@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// TODO: se tiver tempo de adicionar password e hash para encriptar a senha
+model Customer {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  removedAt DateTime?
+  rides     Ride[]
+}
+
+// ride/estimate não precisa de tabela no banco de dados
+model Driver {
+  id          Int   @id @default(autoincrement())
+  name        String 
+  description String
+  car         String
+  rating      Float
+  ratingText  String
+  pricePerKm  Float
+  minimumKm   Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  removedAt   DateTime?
+  rides       Ride[]
+}
+
+model Ride {
+  id          Int   @id @default(autoincrement())
+  driver_id   Int
+  driver      Driver @relation(fields: [driver_id], references: [id])
+  customer_id String
+  customer    Customer  @relation(fields: [customer_id], references: [id])
+  origin      String
+  destination String
+  distance    Float
+  duration    String
+  value       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  removedAt   DateTime?
+}
