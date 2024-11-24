@@ -1,6 +1,7 @@
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 import App from "./App.tsx";
+import Historico from "./Historico.tsx";
 import "./index.css";
 import OpcoesViagem from "./OpcoesViagem.tsx";
 import SolicitacaoViagem from "./SolicitacaoViagem.tsx";
@@ -13,6 +14,8 @@ ReactDOM.createRoot(root!).render(
       <Route path="/" element={<App />} />
       <Route path="/solicitacao-viagem" element={<SolicitacaoViagem />} />
       <Route path="/opcoes-viagem/:customer_id" element={<OpcoesViagem />} />
+      <Route path="/historico" element={<Historico />} />
+      <Route path="*" element={<h1>Not Found</h1>} />
     </Routes>
   </BrowserRouter>
 );
