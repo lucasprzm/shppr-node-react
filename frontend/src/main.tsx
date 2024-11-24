@@ -12,7 +12,7 @@ ReactDOM.createRoot(root!).render(
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="/solicitacao-viagem" element={<SolicitacaoViagem />} />
-      <Route path="/opcoes-viagem" element={<OpcoesViagem />} />
+      <Route path="/opcoes-viagem/:customer_id" element={<OpcoesViagem />} />
     </Routes>
   </BrowserRouter>
 );
