@@ -1,7 +1,7 @@
 import { Button, notification, Table, TableProps } from "antd";
 import axios from "axios";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { environment } from "./environments/enviroment";
 import { CustomExceptionResponse } from "./types/exception.type";
 import { RideConfirmReq } from "./types/ride-confirm-req.type";
@@ -14,6 +14,7 @@ function OpcoesViagem() {
   const [carregando, setCarregando] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
+  const params = useParams();
 
   const columns: TableProps<Ride>["columns"] = [
     {
@@ -56,7 +57,7 @@ function OpcoesViagem() {
 
   const confirmRide = (ride: Ride) => {
     const rideConfirm: RideConfirmReq = {
-      customer_id: estimatedRide.customer_id,
+      customer_id: params.customer_id,
       // TODO - ajustar para pegar o endereço fornecido pelo usuário
       origin: `${estimatedRide.origin.latitude}, ${estimatedRide.origin.longitude}`,
       destination: `${estimatedRide.destination.latitude}, ${estimatedRide.destination.longitude}`,
@@ -88,6 +89,11 @@ function OpcoesViagem() {
     });
   };
 
+  // TODO - adicionar botão para voltar
+  // TODO - adicionar título
+  // TODO - adicionar descrição
+  // TODO - adicionar mapa
+  // TODO - verificar erro do console de key da tabela
   return (
     <div className="mx-auto">
       <nav className="w-full bg-white border-b border-gray-200 fixed top-0 lg:relative z-[1000]">

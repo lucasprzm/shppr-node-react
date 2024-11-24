@@ -1,5 +1,5 @@
 export type RideConfirmReq = {
-  customer_id: string;
+  customer_id?: string;
   origin: string;
   destination: string;
   distance: number;
