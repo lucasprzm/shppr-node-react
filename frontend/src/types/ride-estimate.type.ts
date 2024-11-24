@@ -2,7 +2,6 @@ import { ComputeRoutesGoogleMaps, LatLng } from "./compute-routes-google-maps.ty
 import { Ride } from "./ride.type";
 
 export type RideEstimate = {
-  customer_id: string;
   origin: LatLng;
   destination: LatLng;
   distance: number;
