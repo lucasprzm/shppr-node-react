@@ -1,4 +1,9 @@
-import { Button, Form, FormProps, Input } from "antd";
+import { Button, Form, FormProps, Input, notification } from "antd";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { environment } from "./environments/enviroment";
+import { CustomExceptionResponse } from "./types/exception.type";
 
 function SolicitacaoViagem() {
   type FieldType = {
@@ -7,16 +12,36 @@ function SolicitacaoViagem() {
     destination?: string;
   };
 
+  const [api, contextHolder] = notification.useNotification();
+  const navigate = useNavigate();
+  const [carregando, setCarregando] = useState(false);
+
   const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-    console.log("Success:", values);
+    setCarregando(true);
+    axios
+      .post(`${environment.api.url}/ride/estimate`, values)
+      .then((response) => {
+        console.log(response.data);
+        navigate("/opcoes-viagem", { state: { data: response.data } });
+      })
+      .catch((error) => {
+        openErrorNotification(error.response.data);
+      })
+      .finally(() => setCarregando(false));
   };
 
-  const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const openErrorNotification = ({ error_code, error_description }: CustomExceptionResponse) => {
+    api.error({
+      message: error_code,
+      description: error_description,
+      placement: "top",
+      pauseOnHover: true,
+    });
   };
 
   return (
     <div className="mx-auto">
+      {contextHolder}
       <nav className="w-full bg-white border-b border-gray-200 fixed top-0 lg:relative z-[1000]">
         <div className="mx-auto max-w-[100rem] pl-3 pr-2 sm:pl-4 lg:px-4 2xl:px-6">
           <div className="flex h-16 justify-between">
@@ -29,7 +54,7 @@ function SolicitacaoViagem() {
         </div>
       </nav>
       <main className="mt-[65px] lg:mt-0">
-        <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl">
+        <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl flex justify-center">
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -37,9 +62,8 @@ function SolicitacaoViagem() {
             style={{ maxWidth: 600 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             autoComplete="off"
-            className="my-8"
+            className="my-8 w-full"
           >
             <Form.Item<FieldType>
               label="Id do Usuário"
@@ -63,7 +87,7 @@ function SolicitacaoViagem() {
               <Input />
             </Form.Item>
             <Form.Item label={null}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" loading={carregando}>
                 Estimar
               </Button>
             </Form.Item>
