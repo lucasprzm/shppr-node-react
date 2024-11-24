@@ -59,6 +59,10 @@ function OpcoesViagem() {
     {
       title: "Valor da viagem",
       dataIndex: "value",
+      render: (value: number) =>
+        `R$ ${Intl.NumberFormat("pt-BR", { currency: "BRL", maximumFractionDigits: 2 }).format(
+          value
+        )}`,
     },
     {
       title: "Ação",
@@ -107,9 +111,7 @@ function OpcoesViagem() {
   };
 
   // TODO - adicionar botão para voltar
-  // TODO - adicionar título
   // TODO - adicionar descrição
-  // TODO - adicionar mapa
   // TODO - verificar erro do console de key da tabela
   return (
     <div className="mx-auto">
@@ -128,6 +130,9 @@ function OpcoesViagem() {
         <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl flex justify-center">
           {contextHolder}
           <div className="flex flex-col">
+            <section className="mt-8">
+              <h1 className="text-3xl font-bold text-center">Opções de viagem</h1>
+            </section>
             <section className="flex justify-center mt-8">
               <Image width={600} src={map} />
             </section>
