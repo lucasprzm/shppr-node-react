@@ -50,43 +50,50 @@ function SolicitacaoViagem() {
       <main className="mt-[65px] lg:mt-0">
         <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl flex justify-center">
           {contextHolder}
-          <Form
-            name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
-            style={{ maxWidth: 600 }}
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            autoComplete="off"
-            className="my-8 w-full"
-          >
-            <Form.Item<RideEstimateReq>
-              label="Id do Usuário"
-              name="customer_id"
-              rules={[{ required: true, message: "Digite o Id do usuário" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item<RideEstimateReq>
-              label="Origem"
-              name="origin"
-              rules={[{ required: true, message: "Digite o endereço de origem" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item<RideEstimateReq>
-              label="Destino"
-              name="destination"
-              rules={[{ required: true, message: "Digite o endereço de destino" }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item label={null}>
-              <Button type="primary" htmlType="submit" loading={carregando}>
-                Estimar
-              </Button>
-            </Form.Item>
-          </Form>
+          <div className="flex flex-col">
+            <section className="mt-8">
+              <h1 className="text-3xl font-bold text-center">Solicitação de viagem</h1>
+            </section>
+            <section className="my-8">
+              <Form
+                name="basic"
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                style={{ maxWidth: 600 }}
+                initialValues={{ remember: true }}
+                onFinish={onFinish}
+                autoComplete="off"
+                className="w-full"
+              >
+                <Form.Item<RideEstimateReq>
+                  label="Id do Usuário"
+                  name="customer_id"
+                  rules={[{ required: true, message: "Digite o Id do usuário" }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item<RideEstimateReq>
+                  label="Origem"
+                  name="origin"
+                  rules={[{ required: true, message: "Digite o endereço de origem" }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item<RideEstimateReq>
+                  label="Destino"
+                  name="destination"
+                  rules={[{ required: true, message: "Digite o endereço de destino" }]}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item label={null}>
+                  <Button type="primary" htmlType="submit" loading={carregando}>
+                    Estimar
+                  </Button>
+                </Form.Item>
+              </Form>
+            </section>
+          </div>
         </div>
       </main>
     </div>
