@@ -77,7 +77,6 @@ export class RideService {
       estimateRideDto.routeResponse.routes[0].legs[0].startLocation.latLng;
     estimateRideDto.destination =
       estimateRideDto.routeResponse.routes[0].legs[0].endLocation.latLng;
-    estimateRideDto.customer_id = customer_id;
 
     return estimateRideDto;
   }
