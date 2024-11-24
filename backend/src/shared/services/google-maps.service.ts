@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { env } from 'process';
 import { catchError, firstValueFrom } from 'rxjs';
-import { ComputeRoutesGoogleMapsDto } from '../dtos';
+import { ComputeRoutesGoogleMapsDto, LatLng } from '../dtos';
 
 @Injectable()
 export class GoogleMapsService {
@@ -42,5 +42,11 @@ export class GoogleMapsService {
         ),
     );
     return data;
+  }
+
+  async getStaticMap(origin: LatLng, destination: LatLng): Promise<string> {
+    const url = `https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=roadmap&path=color:0x0000ff|weight:5|${origin.latitude},${origin.longitude}|${destination.latitude},${destination.longitude}&key=${env.GOOGLE_API_KEY}`;
+
+    return url;
   }
 }

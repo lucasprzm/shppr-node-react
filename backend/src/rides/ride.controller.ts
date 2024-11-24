@@ -12,6 +12,7 @@ import { ApiQuery } from '@nestjs/swagger';
 import {
   RideByCustomerDto,
   RideConfirmReqDto,
+  RideCoordinatesReqDto,
   RideEstimateDto,
   RideEstimateReqDto,
 } from 'src/rides/dtos';
@@ -47,5 +48,11 @@ export class RideController {
     @Query('driver_id') driver_id?: string,
   ): Promise<RideByCustomerDto> {
     return this.rideService.findByCustomer(customer_id, driver_id);
+  }
+
+  @Post('estimate/map')
+  @HttpCode(200)
+  async getStaticMap(@Body() request: RideCoordinatesReqDto): Promise<string> {
+    return this.rideService.getStaticMap(request.origin, request.destination);
   }
 }
