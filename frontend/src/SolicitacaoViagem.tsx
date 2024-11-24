@@ -13,13 +13,11 @@ function SolicitacaoViagem() {
 
   const onFinish: FormProps<RideEstimateReq>["onFinish"] = (values) => {
     setCarregando(true);
-    // TODO - verificar no formulário de entrega se pedem o id do usuário
-    values.customer_id = "a3dbf154-a0ce-4b58-b0d4-343d06ffe514";
     axios
       .post(`${environment.api.url}/ride/estimate`, values)
       .then((response) => {
         console.log(response.data);
-        navigate("/opcoes-viagem", { state: { data: response.data } });
+        navigate(`/opcoes-viagem/${values.customer_id}`, { state: { data: response.data } });
       })
       .catch((error) => {
         openErrorNotification(error.response.data);
@@ -35,7 +33,7 @@ function SolicitacaoViagem() {
       pauseOnHover: true,
     });
   };
-
+  // TODO - fazer input com pesquisa de endereço
   return (
     <div className="mx-auto">
       <nav className="w-full bg-white border-b border-gray-200 fixed top-0 lg:relative z-[1000]">
