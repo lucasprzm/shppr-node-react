@@ -4,20 +4,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { environment } from "./environments/enviroment";
 import { CustomExceptionResponse } from "./types/exception.type";
+import { RideEstimateReq } from "./types/ride-estimate-req.type";
 
 function SolicitacaoViagem() {
-  type FieldType = {
-    customer_id?: string;
-    origin?: string;
-    destination?: string;
-  };
-
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const [carregando, setCarregando] = useState(false);
 
-  const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+  const onFinish: FormProps<RideEstimateReq>["onFinish"] = (values) => {
     setCarregando(true);
+    // TODO - verificar no formulário de entrega se pedem o id do usuário
+    values.customer_id = "a3dbf154-a0ce-4b58-b0d4-343d06ffe514";
     axios
       .post(`${environment.api.url}/ride/estimate`, values)
       .then((response) => {
@@ -41,7 +38,6 @@ function SolicitacaoViagem() {
 
   return (
     <div className="mx-auto">
-      {contextHolder}
       <nav className="w-full bg-white border-b border-gray-200 fixed top-0 lg:relative z-[1000]">
         <div className="mx-auto max-w-[100rem] pl-3 pr-2 sm:pl-4 lg:px-4 2xl:px-6">
           <div className="flex h-16 justify-between">
@@ -55,6 +51,7 @@ function SolicitacaoViagem() {
       </nav>
       <main className="mt-[65px] lg:mt-0">
         <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl flex justify-center">
+          {contextHolder}
           <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -65,21 +62,21 @@ function SolicitacaoViagem() {
             autoComplete="off"
             className="my-8 w-full"
           >
-            <Form.Item<FieldType>
+            <Form.Item<RideEstimateReq>
               label="Id do Usuário"
               name="customer_id"
               rules={[{ required: true, message: "Digite o Id do usuário" }]}
             >
               <Input />
             </Form.Item>
-            <Form.Item<FieldType>
+            <Form.Item<RideEstimateReq>
               label="Origem"
               name="origin"
               rules={[{ required: true, message: "Digite o endereço de origem" }]}
             >
               <Input />
             </Form.Item>
-            <Form.Item<FieldType>
+            <Form.Item<RideEstimateReq>
               label="Destino"
               name="destination"
               rules={[{ required: true, message: "Digite o endereço de destino" }]}
