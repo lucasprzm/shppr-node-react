@@ -10,21 +10,9 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
-// TODO: se tiver tempo de adicionar password e hash para encriptar a senha
-model Customer {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  removedAt DateTime?
-  rides     Ride[]
-}
-
-// ride/estimate não precisa de tabela no banco de dados
 model Driver {
   id          Int   @id @default(autoincrement())
   name        String 
@@ -45,7 +33,6 @@ model Ride {
   driver_id   Int
   driver      Driver @relation(fields: [driver_id], references: [id])
   customer_id String
-  customer    Customer  @relation(fields: [customer_id], references: [id])
   origin      String
   destination String
   distance    Float
