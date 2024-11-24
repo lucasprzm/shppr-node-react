@@ -1,10 +1,11 @@
-import { Button, notification, Table, TableProps } from "antd";
+import { Button, Image, notification, Table, TableProps } from "antd";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { environment } from "./environments/enviroment";
 import { CustomExceptionResponse } from "./types/exception.type";
 import { RideConfirmReq } from "./types/ride-confirm-req.type";
+import { RideCoordinatesReq } from "./types/ride-coordinates-req.type";
 import { RideEstimate } from "./types/ride-estimate.type";
 import { Ride } from "./types/ride.type";
 
@@ -15,6 +16,22 @@ function OpcoesViagem() {
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const params = useParams();
+  const [map, setMap] = useState<string>("");
+
+  useEffect(() => {
+    const request: RideCoordinatesReq = {
+      origin: estimatedRide.origin,
+      destination: estimatedRide.destination,
+    };
+    axios
+      .post(`${environment.api.url}/ride/estimate/map`, request)
+      .then((response) => {
+        setMap(response.data);
+      })
+      .catch((error) => {
+        openErrorNotification(error.response.data);
+      });
+  }, []);
 
   const columns: TableProps<Ride>["columns"] = [
     {
@@ -110,7 +127,14 @@ function OpcoesViagem() {
       <main className="mt-[65px] lg:mt-0">
         <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl flex justify-center">
           {contextHolder}
-          <Table<Ride> columns={columns} dataSource={estimatedRide.options} className="my-8" />
+          <div className="flex flex-col">
+            <section className="flex justify-center mt-8">
+              <Image width={600} src={map} />
+            </section>
+            <section>
+              <Table<Ride> columns={columns} dataSource={estimatedRide.options} className="my-8" />
+            </section>
+          </div>
         </div>
       </main>
     </div>
