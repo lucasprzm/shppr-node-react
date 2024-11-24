@@ -45,7 +45,10 @@ export class GoogleMapsService {
   }
 
   async getStaticMap(origin: LatLng, destination: LatLng): Promise<string> {
-    const url = `https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=roadmap&path=color:0x0000ff|weight:5|${origin.latitude},${origin.longitude}|${destination.latitude},${destination.longitude}&key=${env.GOOGLE_API_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/staticmap?size=600x300
+      &markers=color:blue|label:A|${origin.latitude},${origin.longitude}
+      &markers=color:blue|label:B|${destination.latitude},${destination.longitude}
+      &key=${env.GOOGLE_API_KEY}`;
 
     return url;
   }
