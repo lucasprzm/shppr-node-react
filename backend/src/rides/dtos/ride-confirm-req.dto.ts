@@ -1,4 +1,4 @@
-export class ConfirmRideReqDto {
+export class RideConfirmReqDto {
   customer_id: string;
   origin: string;
   destination: string;

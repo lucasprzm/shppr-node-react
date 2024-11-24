@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {
-  ConfirmRideReqDto,
-  EstimateRideDto,
   RideByCustomerDto,
+  RideConfirmReqDto,
+  RideEstimateDto,
 } from 'src/rides/dtos';
 import {
   BadRequestException,
@@ -23,7 +23,7 @@ export class RideService {
     origin: string,
     destination: string,
     customer_id: string,
-  ): Promise<EstimateRideDto> {
+  ): Promise<RideEstimateDto> {
     // TODO - procurar lib para validações de dados Zod ou class-validator, tem nas docs do NestJS
     if (
       origin == null ||
@@ -37,7 +37,7 @@ export class RideService {
       throw new BadRequestException();
     }
 
-    let estimateRideDto = new EstimateRideDto();
+    let estimateRideDto = new RideEstimateDto();
     estimateRideDto.routeResponse = await this.googleMapsService.getDistance(
       origin,
       destination,
@@ -77,11 +77,12 @@ export class RideService {
       estimateRideDto.routeResponse.routes[0].legs[0].startLocation.latLng;
     estimateRideDto.destination =
       estimateRideDto.routeResponse.routes[0].legs[0].endLocation.latLng;
+    estimateRideDto.customer_id = customer_id;
 
     return estimateRideDto;
   }
 
-  async confirm(request: ConfirmRideReqDto): Promise<void> {
+  async confirm(request: RideConfirmReqDto): Promise<void> {
     if (
       request.origin == null ||
       request.destination == null ||
