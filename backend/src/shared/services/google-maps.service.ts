@@ -14,10 +14,10 @@ export class GoogleMapsService {
   ): Promise<ComputeRoutesGoogleMapsDto> {
     const req = {
       origin: {
-        address: '1800 Amphitheatre Parkway, Mountain View, CA 94043',
+        address: origin,
       },
       destination: {
-        address: 'Sloat Blvd &, Upper Great Hwy, San Francisco, CA 94132',
+        address: destination,
       },
       travelMode: 'DRIVE',
     };
