@@ -1,5 +1,5 @@
-export class RideConfirmReqDto {
-  customer_id: string;
+export type RideConfirmReq = {
+  customer_id?: string;
   origin: string;
   destination: string;
   distance: number;
@@ -9,4 +9,4 @@ export class RideConfirmReqDto {
     name: string;
   };
   value: number;
-}
+};

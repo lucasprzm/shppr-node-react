@@ -2,15 +2,6 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  const defaultCustomer = await prisma.customer.upsert({
-    where: { email: 'teste@teste.com' },
-    update: {},
-    create: {
-      email: 'teste@teste.com',
-      name: 'Teste',
-    },
-  });
-
   const homerSimpsonDriver = await prisma.driver.upsert({
     where: { id: 1 },
     update: {},
@@ -63,7 +54,6 @@ async function main() {
   });
 
   console.log({
-    defaultCustomer,
     homerSimpsonDriver,
     dominicTorettoDriver,
     jamesBondDriver,

@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { env } from 'process';
 import { catchError, firstValueFrom } from 'rxjs';
-import { ComputeRoutesGoogleMapsDto } from '../dtos';
+import { ComputeRoutesGoogleMapsDto, LatLng } from '../dtos';
 
 @Injectable()
 export class GoogleMapsService {
@@ -14,10 +14,10 @@ export class GoogleMapsService {
   ): Promise<ComputeRoutesGoogleMapsDto> {
     const req = {
       origin: {
-        address: '1800 Amphitheatre Parkway, Mountain View, CA 94043',
+        address: origin,
       },
       destination: {
-        address: 'Sloat Blvd &, Upper Great Hwy, San Francisco, CA 94132',
+        address: destination,
       },
       travelMode: 'DRIVE',
     };
@@ -42,5 +42,14 @@ export class GoogleMapsService {
         ),
     );
     return data;
+  }
+
+  async getStaticMap(origin: LatLng, destination: LatLng): Promise<string> {
+    const url = `https://maps.googleapis.com/maps/api/staticmap?size=600x300
+      &markers=color:blue|label:A|${origin.latitude},${origin.longitude}
+      &markers=color:blue|label:B|${destination.latitude},${destination.longitude}
+      &key=${env.GOOGLE_API_KEY}`;
+
+    return url;
   }
 }

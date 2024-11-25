@@ -1,7 +1,7 @@
 import { ComputeRoutesGoogleMapsDto, LatLng } from 'src/shared/dtos';
 import { RideDto } from './ride.dto';
 
-export class EstimateRideDto {
+export class RideEstimateDto {
   origin: LatLng;
   destination: LatLng;
   distance: number;

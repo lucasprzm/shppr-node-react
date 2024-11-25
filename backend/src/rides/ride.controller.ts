@@ -10,10 +10,11 @@ import {
 } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
 import {
-  ConfirmRideReqDto,
-  EstimateRideDto,
-  EstimateRideReqDto,
   RideByCustomerDto,
+  RideConfirmReqDto,
+  RideCoordinatesReqDto,
+  RideEstimateDto,
+  RideEstimateReqDto,
 } from 'src/rides/dtos';
 import { RideService } from 'src/rides/ride.service';
 
@@ -24,8 +25,8 @@ export class RideController {
   @Post('estimate')
   @HttpCode(200)
   async estimate(
-    @Body() request: EstimateRideReqDto,
-  ): Promise<EstimateRideDto> {
+    @Body() request: RideEstimateReqDto,
+  ): Promise<RideEstimateDto> {
     return this.rideService.estimate(
       request.origin,
       request.destination,
@@ -35,7 +36,7 @@ export class RideController {
 
   @Patch('confirm')
   @HttpCode(200)
-  async confirm(@Body() request: ConfirmRideReqDto): Promise<void> {
+  async confirm(@Body() request: RideConfirmReqDto): Promise<void> {
     return this.rideService.confirm(request);
   }
 
@@ -47,5 +48,11 @@ export class RideController {
     @Query('driver_id') driver_id?: string,
   ): Promise<RideByCustomerDto> {
     return this.rideService.findByCustomer(customer_id, driver_id);
+  }
+
+  @Post('estimate/map')
+  @HttpCode(200)
+  async getStaticMap(@Body() request: RideCoordinatesReqDto): Promise<string> {
+    return this.rideService.getStaticMap(request.origin, request.destination);
   }
 }

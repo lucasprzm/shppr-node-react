@@ -1,5 +1,11 @@
-export class RideConfirmReqDto {
+export type RideByCustomer = {
   customer_id: string;
+  rides: RideDriver[];
+};
+
+export type RideDriver = {
+  id: number;
+  date: Date;
   origin: string;
   destination: string;
   distance: number;
@@ -9,4 +15,4 @@ export class RideConfirmReqDto {
     name: string;
   };
   value: number;
-}
+};
