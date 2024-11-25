@@ -14,9 +14,9 @@ function Historico() {
 
   useEffect(() => {
     axios
-      .get(`${environment.api.url}/driver`)
+      .get<Driver[]>(`${environment.api.url}/driver`)
       .then((response) => {
-        setDrivers([...response.data, { id: null, name: "Todos" }]);
+        setDrivers([...response.data, { id: 0, name: "Todos" } as Driver]);
       })
       .catch((error) => {
         openErrorNotification(error.response.data);
@@ -25,12 +25,12 @@ function Historico() {
 
   type FormType = {
     customer_id: string;
-    driver_id?: string;
+    driver_id?: number;
   };
 
   const onFinish: FormProps<FormType>["onFinish"] = (values) => {
     let url = `${environment.api.url}/ride/${values.customer_id}`;
-    if (!!values.driver_id) {
+    if (values.driver_id !== 0) {
       url += `?driver_id=${values.driver_id}`;
     }
 
@@ -64,8 +64,8 @@ function Historico() {
     },
     {
       title: "Nome do motorista",
-      dataIndex: "name",
-      render: (ridedriver: RideDriver) => ridedriver?.driver?.name,
+      dataIndex: "driver",
+      render: (driver: Driver) => driver.name,
     },
     {
       title: "Origem",
@@ -78,11 +78,23 @@ function Historico() {
     {
       title: "Distância",
       dataIndex: "distance",
-      render: (distance: number) => `${distance} km`,
+      render: (distance: number) =>
+        `${Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 }).format(distance)} km`,
     },
     {
       title: "Tempo",
       dataIndex: "duration",
+      // converter formato de string xxxs para hh:mm:ss
+      render: (duration: string) => {
+        const seconds = parseInt(duration);
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        // colocar 0 a esquerda ou a direita
+        const sec = seconds % 60;
+        return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${sec
+          .toString()
+          .padStart(2, "0")}`;
+      },
     },
     {
       title: "Valor da viagem",
@@ -120,7 +132,7 @@ function Historico() {
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 style={{ maxWidth: 600 }}
-                initialValues={{ remember: true }}
+                initialValues={{ remember: true, driver_id: 0 }}
                 onFinish={onFinish}
                 autoComplete="off"
                 className="w-full"
