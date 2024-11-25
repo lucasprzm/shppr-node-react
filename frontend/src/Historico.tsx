@@ -38,7 +38,6 @@ function Historico() {
     axios
       .get<RideByCustomer>(url)
       .then((response) => {
-        console.log(response.data);
         setHistorico(response.data);
       })
       .catch((error) => {

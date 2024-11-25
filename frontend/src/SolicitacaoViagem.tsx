@@ -16,7 +16,6 @@ function SolicitacaoViagem() {
     axios
       .post(`${environment.api.url}/ride/estimate`, values)
       .then((response) => {
-        console.log(response.data);
         navigate(`/opcoes-viagem/${values.customer_id}`, { state: { data: response.data } });
       })
       .catch((error) => {
