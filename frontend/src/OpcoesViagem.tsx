@@ -1,7 +1,7 @@
 import { Button, Image, notification, Popconfirm, Table, TableProps } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router";
 import { environment } from "./environments/enviroment";
 import { CustomExceptionResponse } from "./types/exception.type";
 import { RideConfirmReq } from "./types/ride-confirm-req.type";
@@ -17,6 +17,7 @@ function OpcoesViagem() {
   const navigate = useNavigate();
   const params = useParams();
   const [map, setMap] = useState<string>("");
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const request: RideCoordinatesReq = {
@@ -60,9 +61,11 @@ function OpcoesViagem() {
       title: "Valor da viagem",
       dataIndex: "value",
       render: (value: number) =>
-        `R$ ${Intl.NumberFormat("pt-BR", { currency: "BRL", maximumFractionDigits: 2 }).format(
-          value
-        )}`,
+        `R$ ${Intl.NumberFormat("pt-BR", {
+          currency: "BRL",
+          maximumFractionDigits: 2,
+          minimumFractionDigits: 2,
+        }).format(value)}`,
     },
     {
       title: "Ação",
@@ -87,8 +90,8 @@ function OpcoesViagem() {
     const rideConfirm: RideConfirmReq = {
       customer_id: params.customer_id,
       // TODO - ajustar para pegar o endereço fornecido pelo usuário
-      origin: `${estimatedRide.origin.latitude}, ${estimatedRide.origin.longitude}`,
-      destination: `${estimatedRide.destination.latitude}, ${estimatedRide.destination.longitude}`,
+      origin: searchParams[0].get("origin") as string,
+      destination: searchParams[0].get("destination") as string,
       distance: estimatedRide.distance,
       duration: estimatedRide.duration,
       driver: { ...ride },
