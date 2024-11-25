@@ -1,4 +1,4 @@
-import { Button, Image, notification, Table, TableProps } from "antd";
+import { Button, Image, notification, Popconfirm, Table, TableProps } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
@@ -67,11 +67,18 @@ function OpcoesViagem() {
     {
       title: "Ação",
       dataIndex: "action",
-      // TODO - colocar popconfirm
       render: (_, ride) => (
-        <Button type="primary" onClick={() => confirmRide(ride)} loading={carregando}>
-          Escolher
-        </Button>
+        <Popconfirm
+          placement="top"
+          title="Deseja escolher essa viagem?"
+          okText="Sim"
+          cancelText="Não"
+          onConfirm={() => confirmRide(ride)}
+        >
+          <Button type="primary" loading={carregando}>
+            Escolher
+          </Button>
+        </Popconfirm>
       ),
     },
   ];
@@ -92,8 +99,7 @@ function OpcoesViagem() {
     axios
       .patch(`${environment.api.url}/ride/confirm`, rideConfirm)
       .then((response) => {
-        console.log(response.data);
-        navigate("/historico");
+        if (response.status === 200) navigate("/historico");
       })
       .catch((error) => {
         openErrorNotification(error.response.data);
