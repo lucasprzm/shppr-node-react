@@ -1,0 +1,23 @@
+version: "3"
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: shppr-node-react-frontend:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/frontend
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: shppr-node-react-backend:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/backend
+    env_file: .env

@@ -2,6 +2,7 @@ import { Button, Image, notification, Popconfirm, Table, TableProps } from "antd
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router";
+import appLogo from "./assets/3624755.jpg";
 import { environment } from "./environments/enviroment";
 import { CustomExceptionResponse } from "./types/exception.type";
 import { RideConfirmReq } from "./types/ride-confirm-req.type";
@@ -129,7 +130,7 @@ function OpcoesViagem() {
           <div className="flex h-16 justify-between">
             <div className="flex">
               <div className="my-auto">
-                <img className="h-7 w-auto" src="/src/assets/3624755.jpg" alt="Logo" />
+                <img className="h-7 w-auto" src={appLogo} alt="Logo" />
               </div>
             </div>
           </div>

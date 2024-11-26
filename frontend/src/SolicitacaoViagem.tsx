@@ -2,6 +2,7 @@ import { Button, Form, FormProps, Input, notification } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import appLogo from "./assets/3624755.jpg";
 import { environment } from "./environments/enviroment";
 import { CustomExceptionResponse } from "./types/exception.type";
 import { RideEstimateReq } from "./types/ride-estimate-req.type";
@@ -27,6 +28,7 @@ function SolicitacaoViagem() {
       .finally(() => setCarregando(false));
   };
 
+  // TODO - aprimorar tratamento de erro para erros não esperados
   const openErrorNotification = ({ error_code, error_description }: CustomExceptionResponse) => {
     api.error({
       message: error_code,
@@ -43,7 +45,7 @@ function SolicitacaoViagem() {
           <div className="flex h-16 justify-between">
             <div className="flex">
               <div className="my-auto">
-                <img className="h-7 w-auto" src="/src/assets/3624755.jpg" alt="Logo" />
+                <img className="h-7 w-auto" src={appLogo} alt="Logo" />
               </div>
             </div>
           </div>
