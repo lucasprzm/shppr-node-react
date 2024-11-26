@@ -7,7 +7,7 @@ function Header() {
         <div className="flex h-16 justify-between">
           <div className="flex">
             <div className="my-auto">
-              <img className="h-7 w-auto" src={appLogo} alt="Logo" />
+              <img className="h-14 w-auto" src={appLogo} alt="Logo" />
             </div>
           </div>
         </div>
