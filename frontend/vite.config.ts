@@ -9,4 +9,8 @@ export default defineConfig({
     port: 80,
     strictPort: true,
   },
+  server: {
+    port: 80,
+    strictPort: true,
+  },
 });
