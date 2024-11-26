@@ -3,15 +3,15 @@ import {
   RideByCustomerDto,
   RideConfirmReqDto,
   RideEstimateDto,
-} from 'src/rides/dtos';
-import { LatLng } from 'src/shared/dtos';
+} from 'src/modules/rides/dtos';
+import { LatLng } from 'src/modules/shared/dtos';
 import {
   BadRequestException,
   NotAcceptableException,
   NotFoundException,
-} from 'src/shared/exceptions';
-import { GoogleMapsService } from 'src/shared/services/google-maps.service';
-import { PrismaService } from 'src/shared/services/prisma.service';
+} from 'src/modules/shared/exceptions';
+import { GoogleMapsService } from 'src/modules/shared/services/google-maps.service';
+import { PrismaService } from 'src/modules/shared/services/prisma.service';
 
 @Injectable()
 export class RideService {
@@ -37,6 +37,10 @@ export class RideService {
     ) {
       throw new BadRequestException();
     }
+
+    console.log('origin', origin);
+    console.log('destination', destination);
+    console.log('customer_id', customer_id);
 
     let estimateRideDto = new RideEstimateDto();
     estimateRideDto.routeResponse = await this.googleMapsService.getDistance(
@@ -78,7 +82,7 @@ export class RideService {
       estimateRideDto.routeResponse.routes[0].legs[0].startLocation.latLng;
     estimateRideDto.destination =
       estimateRideDto.routeResponse.routes[0].legs[0].endLocation.latLng;
-
+    console.log('estimateRideDto', estimateRideDto);
     return estimateRideDto;
   }
 

@@ -1,4 +1,4 @@
-import { LatLng } from 'src/shared/dtos';
+import { LatLng } from 'src/modules/shared/dtos';
 
 export class RideCoordinatesReqDto {
   origin: LatLng;

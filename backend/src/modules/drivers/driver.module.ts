@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SharedModule } from 'src/shared/shared.module';
+import { SharedModule } from 'src/modules/shared/shared.module';
 import { DriverController } from './driver.controller';
 import { DriverService } from './driver.service';
 
