@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import {
-  RideByCustomerDto,
-  RideConfirmReqDto,
-  RideEstimateDto,
-} from 'src/modules/rides/dtos';
-import { LatLng } from 'src/modules/shared/dtos';
-import {
   BadRequestException,
   NotAcceptableException,
   NotFoundException,
-} from 'src/modules/shared/exceptions';
-import { GoogleMapsService } from 'src/modules/shared/services/google-maps.service';
-import { PrismaService } from 'src/modules/shared/services/prisma.service';
+} from 'src/common/exceptions';
+import {
+  RideByCustomerDto,
+  RideConfirmReqDto,
+  RideEstimateDto,
+} from 'src/modules/ride/dto';
+import { LatLng } from 'src/shared/dto';
+import { GoogleMapsService } from 'src/shared/services/google-maps.service';
+import { PrismaService } from 'src/shared/services/prisma.service';
 
 @Injectable()
 export class RideService {

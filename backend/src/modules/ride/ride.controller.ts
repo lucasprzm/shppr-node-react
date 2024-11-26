@@ -15,8 +15,8 @@ import {
   RideCoordinatesReqDto,
   RideEstimateDto,
   RideEstimateReqDto,
-} from 'src/modules/rides/dtos';
-import { RideService } from 'src/modules/rides/ride.service';
+} from 'src/modules/ride/dto';
+import { RideService } from 'src/modules/ride/ride.service';
 
 @Controller('ride')
 export class RideController {
