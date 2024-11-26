@@ -13,7 +13,7 @@ ReactDOM.createRoot(root!).render(
   <ConfigProvider locale={pt_BR}>
     <BrowserRouter>
       <Routes>
-        <Route path="/solicitacao-viagem" element={<SolicitacaoViagem />} />
+        <Route path="/" element={<SolicitacaoViagem />} />
         <Route path="/opcoes-viagem/:customer_id" element={<OpcoesViagem />} />
         <Route path="/historico" element={<Historico />} />
         <Route path="*" element={<h1>Not Found</h1>} />
