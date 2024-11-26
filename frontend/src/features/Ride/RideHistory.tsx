@@ -1,27 +1,18 @@
-import { Button, Form, FormProps, Input, notification, Select, Table, TableProps } from "antd";
-import axios from "axios";
+import { Button, Form, FormProps, Input, Select, Table, TableProps } from "antd";
 import { useEffect, useState } from "react";
-import { environment } from "../environments/enviroment";
-import Header from "../shared/components/Header";
-import { Driver } from "../shared/types/driver.type";
-import { CustomExceptionResponse } from "../shared/types/exception.type";
-import { RideByCustomer, RideDriver } from "../shared/types/ride-byCustomer.type";
+import Header from "../../components/Header/Header";
+import { getDriversApi, getRidesApi } from "../../services/api";
+import { Driver, RideByCustomer, RideDriver } from "../../types";
 
-function Historico() {
-  const [carregando, setCarregando] = useState(false);
-  const [api, contextHolder] = notification.useNotification();
+function RideHistory() {
+  const [loading, setLoading] = useState(false);
   const [drivers, setDrivers] = useState<Driver[]>([]);
-  const [historico, setHistorico] = useState<RideByCustomer>();
+  const [history, setHistory] = useState<RideByCustomer>();
 
   useEffect(() => {
-    axios
-      .get<Driver[]>(`${environment.api.url}/driver`)
-      .then((response) => {
-        setDrivers([...response.data, { id: 0, name: "Todos" } as Driver]);
-      })
-      .catch((error) => {
-        openErrorNotification(error.response.data);
-      });
+    getDriversApi().then((response) => {
+      setDrivers([...response.data, { id: 0, name: "Todos" } as Driver]);
+    });
   }, []);
 
   type FormType = {
@@ -30,30 +21,12 @@ function Historico() {
   };
 
   const onFinish: FormProps<FormType>["onFinish"] = (values) => {
-    let url = `${environment.api.url}/ride/${values.customer_id}`;
-    if (values.driver_id !== 0) {
-      url += `?driver_id=${values.driver_id}`;
-    }
-
-    setCarregando(true);
-    axios
-      .get<RideByCustomer>(url)
+    setLoading(true);
+    getRidesApi(values.customer_id, values.driver_id)
       .then((response) => {
-        setHistorico(response.data);
+        setHistory(response.data);
       })
-      .catch((error) => {
-        openErrorNotification(error.response.data);
-      })
-      .finally(() => setCarregando(false));
-  };
-
-  const openErrorNotification = ({ error_code, error_description }: CustomExceptionResponse) => {
-    api.error({
-      message: error_code,
-      description: error_description,
-      placement: "top",
-      pauseOnHover: true,
-    });
+      .finally(() => setLoading(false));
   };
 
   const columns: TableProps<RideDriver>["columns"] = [
@@ -84,12 +57,10 @@ function Historico() {
     {
       title: "Tempo",
       dataIndex: "duration",
-      // converter formato de string xxxs para hh:mm:ss
       render: (duration: string) => {
         const seconds = parseInt(duration);
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
-        // colocar 0 a esquerda ou a direita
         const sec = seconds % 60;
         return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${sec
           .toString()
@@ -111,7 +82,6 @@ function Historico() {
       <Header />
       <main className="mt-[65px] lg:mt-0">
         <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl flex justify-center">
-          {contextHolder}
           <div className="flex flex-col">
             <section className="mt-8">
               <h1 className="text-3xl font-bold text-center">Histórico</h1>
@@ -144,14 +114,14 @@ function Historico() {
                   />
                 </Form.Item>
                 <Form.Item label={null}>
-                  <Button type="primary" htmlType="submit" loading={carregando}>
+                  <Button type="primary" htmlType="submit" loading={loading}>
                     Buscar
                   </Button>
                 </Form.Item>
               </Form>
             </section>
             <section className="my-8">
-              <Table<RideDriver> columns={columns} dataSource={historico?.rides} />
+              <Table<RideDriver> columns={columns} dataSource={history?.rides} />
             </section>
           </div>
         </div>
@@ -160,4 +130,4 @@ function Historico() {
   );
 }
 
-export default Historico;
+export default RideHistory;
