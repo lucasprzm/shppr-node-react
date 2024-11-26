@@ -1,11 +1,11 @@
 import { Button, Form, FormProps, Input, notification, Select, Table, TableProps } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import appLogo from "./assets/3624755.jpg";
-import { environment } from "./environments/enviroment";
-import { Driver } from "./types/driver.type";
-import { CustomExceptionResponse } from "./types/exception.type";
-import { RideByCustomer, RideDriver } from "./types/ride-byCustomer.type";
+import { environment } from "../environments/enviroment";
+import Header from "../shared/components/Header";
+import { Driver } from "../shared/types/driver.type";
+import { CustomExceptionResponse } from "../shared/types/exception.type";
+import { RideByCustomer, RideDriver } from "../shared/types/ride-byCustomer.type";
 
 function Historico() {
   const [carregando, setCarregando] = useState(false);
@@ -108,17 +108,7 @@ function Historico() {
 
   return (
     <div className="mx-auto">
-      <nav className="w-full bg-white border-b border-gray-200 fixed top-0 lg:relative z-[1000]">
-        <div className="mx-auto max-w-[100rem] pl-3 pr-2 sm:pl-4 lg:px-4 2xl:px-6">
-          <div className="flex h-16 justify-between">
-            <div className="flex">
-              <div className="my-auto">
-                <img className="h-7 w-auto" src={appLogo} alt="Logo" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
       <main className="mt-[65px] lg:mt-0">
         <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl flex justify-center">
           {contextHolder}

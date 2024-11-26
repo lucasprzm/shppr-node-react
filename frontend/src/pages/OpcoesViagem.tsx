@@ -2,13 +2,13 @@ import { Button, Image, notification, Popconfirm, Table, TableProps } from "antd
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router";
-import appLogo from "./assets/3624755.jpg";
-import { environment } from "./environments/enviroment";
-import { CustomExceptionResponse } from "./types/exception.type";
-import { RideConfirmReq } from "./types/ride-confirm-req.type";
-import { RideCoordinatesReq } from "./types/ride-coordinates-req.type";
-import { RideEstimate } from "./types/ride-estimate.type";
-import { Ride } from "./types/ride.type";
+import { environment } from "../environments/enviroment";
+import Header from "../shared/components/Header";
+import { CustomExceptionResponse } from "../shared/types/exception.type";
+import { RideConfirmReq } from "../shared/types/ride-confirm-req.type";
+import { RideCoordinatesReq } from "../shared/types/ride-coordinates-req.type";
+import { RideEstimate } from "../shared/types/ride-estimate.type";
+import { Ride } from "../shared/types/ride.type";
 
 function OpcoesViagem() {
   const location = useLocation();
@@ -125,17 +125,7 @@ function OpcoesViagem() {
   // TODO - verificar erro do console de key da tabela
   return (
     <div className="mx-auto">
-      <nav className="w-full bg-white border-b border-gray-200 fixed top-0 lg:relative z-[1000]">
-        <div className="mx-auto max-w-[100rem] pl-3 pr-2 sm:pl-4 lg:px-4 2xl:px-6">
-          <div className="flex h-16 justify-between">
-            <div className="flex">
-              <div className="my-auto">
-                <img className="h-7 w-auto" src={appLogo} alt="Logo" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Header />
       <main className="mt-[65px] lg:mt-0">
         <div className="2xl:mx-auto 2xl:max-w-[1516px] min-[1560px]:max-w-screen-2xl flex justify-center">
           {contextHolder}

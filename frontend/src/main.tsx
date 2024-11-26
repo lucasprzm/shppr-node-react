@@ -2,10 +2,10 @@ import { ConfigProvider } from "antd";
 import pt_BR from "antd/lib/locale/pt_BR";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Historico from "./Historico.tsx";
 import "./index.css";
-import OpcoesViagem from "./OpcoesViagem.tsx";
-import SolicitacaoViagem from "./SolicitacaoViagem.tsx";
+import Historico from "./pages/Historico.tsx";
+import OpcoesViagem from "./pages/OpcoesViagem.tsx";
+import SolicitacaoViagem from "./pages/SolicitacaoViagem.tsx";
 
 const root = document.getElementById("root");
 // TODO - colocar layout padrão do header
