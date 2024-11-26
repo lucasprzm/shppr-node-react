@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { env } from 'process';
 import { catchError, firstValueFrom } from 'rxjs';
-import { ComputeRoutesGoogleMapsDto, LatLng } from '../dtos';
+import { ComputeRoutesGoogleMapsDto, LatLng } from '../dto';
 
 @Injectable()
 export class GoogleMapsService {
