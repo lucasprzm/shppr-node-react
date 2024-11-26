@@ -12,9 +12,6 @@ export class GoogleMapsService {
     origin: string,
     destination: string,
   ): Promise<ComputeRoutesGoogleMapsDto> {
-    console.log('origin', origin);
-    console.log('destination', destination);
-    console.log('env.GOOGLE_API_KEY', env.GOOGLE_API_KEY);
     const req = {
       origin: {
         address: origin,

@@ -38,10 +38,6 @@ export class RideService {
       throw new BadRequestException();
     }
 
-    console.log('origin', origin);
-    console.log('destination', destination);
-    console.log('customer_id', customer_id);
-
     let estimateRideDto = new RideEstimateDto();
     estimateRideDto.routeResponse = await this.googleMapsService.getDistance(
       origin,
@@ -82,7 +78,7 @@ export class RideService {
       estimateRideDto.routeResponse.routes[0].legs[0].startLocation.latLng;
     estimateRideDto.destination =
       estimateRideDto.routeResponse.routes[0].legs[0].endLocation.latLng;
-    console.log('estimateRideDto', estimateRideDto);
+    // TODO - procurar opção de logar as requisições
     return estimateRideDto;
   }
 
