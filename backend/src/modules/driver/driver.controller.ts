@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { DriverService } from './driver.service';
-import { DriverDto } from './dtos/driver.dto';
+import { DriverService } from '../driver/driver.service';
+import { DriverDto } from './dto/driver.dto';
 
 @Controller('driver')
 export class DriverController {

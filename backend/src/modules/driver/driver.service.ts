@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/modules/shared/services/prisma.service';
-import { DriverDto } from './dtos/driver.dto';
+import { PrismaService } from 'src/shared/services/prisma.service';
+import { DriverDto } from './dto/driver.dto';
 
 @Injectable()
 export class DriverService {
