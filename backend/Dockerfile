@@ -1,6 +1,6 @@
 FROM node:20-alpine
 
-WORKDIR /backend                
+WORKDIR /usr/src/app                
 
 COPY . .                            
 
