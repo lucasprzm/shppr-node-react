@@ -28,6 +28,7 @@ function SolicitacaoViagem() {
       .finally(() => setCarregando(false));
   };
 
+  // TODO - aprimorar tratamento de erro para erros não esperados
   const openErrorNotification = ({ error_code, error_description }: CustomExceptionResponse) => {
     api.error({
       message: error_code,
