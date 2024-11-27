@@ -11,8 +11,6 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
       transform: true,
     }),
   );
@@ -22,6 +20,7 @@ async function bootstrap() {
   );
 
   // TODO - Melhorar a documentação da API
+  // TODO - Validar tudo que fiz até agora
   const config = new DocumentBuilder()
     .setTitle('Taxi App API')
     .setDescription('The Taxi App API description')
