@@ -23,21 +23,7 @@ export class RideService {
   async estimate(
     origin: string,
     destination: string,
-    customer_id: string,
   ): Promise<RideEstimateDto> {
-    // TODO - procurar lib para validações de dados Zod ou class-validator, tem nas docs do NestJS
-    if (
-      origin == null ||
-      origin === '' ||
-      destination == null ||
-      destination === '' ||
-      customer_id == null ||
-      customer_id === '' ||
-      origin === destination
-    ) {
-      throw new BadRequestException();
-    }
-
     let estimateRideDto = new RideEstimateDto();
     estimateRideDto.routeResponse = await this.googleMapsService.getDistance(
       origin,
@@ -83,18 +69,6 @@ export class RideService {
   }
 
   async confirm(request: RideConfirmReqDto): Promise<void> {
-    if (
-      request.origin == null ||
-      request.destination == null ||
-      request.origin == '' ||
-      request.destination == '' ||
-      request.customer_id == '' ||
-      request.customer_id == null ||
-      request.origin == request.destination
-    ) {
-      throw new BadRequestException();
-    }
-
     const driver = await this.prismaService.driver.findUnique({
       where: {
         id: request.driver.id,

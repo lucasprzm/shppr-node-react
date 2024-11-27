@@ -27,11 +27,7 @@ export class RideController {
   async estimate(
     @Body() request: RideEstimateReqDto,
   ): Promise<RideEstimateDto> {
-    return this.rideService.estimate(
-      request.origin,
-      request.destination,
-      request.customer_id,
-    );
+    return this.rideService.estimate(request.origin, request.destination);
   }
 
   @Patch('confirm')
