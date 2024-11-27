@@ -83,7 +83,7 @@ function RideOptions() {
       destination: searchParams[0].get("destination") as string,
       distance: estimatedRide.distance,
       duration: estimatedRide.duration,
-      driver: { ...ride },
+      driver: { id: ride.id, name: ride.name },
       value: ride.value,
     };
 
