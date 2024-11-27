@@ -21,16 +21,19 @@ export class CustomHttpExceptionFilter implements ExceptionFilter {
       | { error_code: string; error_description: string };
 
     const errorResponse = {
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
       ...(typeof exceptionResponse === 'string'
         ? { message: exceptionResponse }
         : exceptionResponse),
     };
 
+    const errorLog = {
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+    };
+
     this.logger.error(
-      `Error Message: ${JSON.stringify(errorResponse)}`,
+      `Error Info: ${JSON.stringify(errorLog)}, Message: ${JSON.stringify(errorResponse)}`,
       exception.stack,
     );
 
