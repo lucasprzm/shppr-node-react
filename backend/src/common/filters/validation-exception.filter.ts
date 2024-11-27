@@ -40,7 +40,7 @@ export class ValidationExceptionFilter implements ExceptionFilter {
       errorResponse['error_description'] = 'Motorista inválido';
     }
     this.logger.error(
-      `Error Message: ${JSON.stringify(errorLog)} - ${JSON.stringify(errorResponse)}`,
+      `Error Info: ${JSON.stringify(errorLog)}, Message: ${JSON.stringify(errorResponse)}`,
       exception.stack,
     );
     response.status(status).json(errorResponse);
