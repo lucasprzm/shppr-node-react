@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { configDotenv } from 'dotenv';
 import { AppModule } from './app.module';
 import { CustomHttpExceptionFilter } from './common/filters/custom-http-exception.filter';
+import { ValidationExceptionFilter } from './common/filters/validation-exception.filter';
 
 configDotenv({ path: '../.env' });
 async function bootstrap() {
@@ -15,7 +16,10 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.useGlobalFilters(new CustomHttpExceptionFilter());
+  app.useGlobalFilters(
+    new CustomHttpExceptionFilter(),
+    new ValidationExceptionFilter(),
+  );
 
   // TODO - Melhorar a documentação da API
   const config = new DocumentBuilder()
