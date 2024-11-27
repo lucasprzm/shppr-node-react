@@ -1,3 +1,5 @@
+import { IsNumber } from 'class-validator';
+
 export class ComputeRoutesGoogleMapsDto {
   routes: Route[];
 
@@ -33,6 +35,9 @@ class LocationMaps {
 }
 
 export class LatLng {
+  @IsNumber()
   latitude: number;
+
+  @IsNumber()
   longitude: number;
 }
