@@ -72,7 +72,7 @@ npm run dev
 2. No diretório raiz do projeto, execute o comando:
 
 ```bash
-docker-compose up
+docker compose up
 ```
 
 3. O backend estará rodando na porta `8080` e o frontend na porta `80`.
