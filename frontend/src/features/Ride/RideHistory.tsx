@@ -52,7 +52,7 @@ function RideHistory() {
       title: "Distância",
       dataIndex: "distance",
       render: (distance: number) =>
-        `${Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 }).format(distance)} km`,
+        `${Intl.NumberFormat("pt-BR", { maximumFractionDigits: 2 }).format(distance)} metros`,
     },
     {
       title: "Tempo",
