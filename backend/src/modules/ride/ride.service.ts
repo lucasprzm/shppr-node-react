@@ -34,7 +34,7 @@ export class RideService {
 
     estimateRideDto.duration = route.duration;
 
-    estimateRideDto.distance = route.distanceMeters / 1000;
+    estimateRideDto.distance = route.distanceMeters;
 
     const driversOptions = await this.prismaService.driver.findMany({
       where: {
@@ -55,7 +55,7 @@ export class RideService {
             rating: driver.rating,
             comment: driver.ratingText,
           },
-          value: driver.pricePerKm * estimateRideDto.distance,
+          value: driver.pricePerKm * (estimateRideDto.distance / 1000),
         };
       })
       .sort((a, b) => a.value - b.value);
